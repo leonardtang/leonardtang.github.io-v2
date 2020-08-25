@@ -19,9 +19,9 @@ description: >-                        # used by seo meta and the atom feed
 # url: 'protocol://domain'
 url: 'https://leonardtang.github.io'
 
-author: your_full_name                  # change to your full name
+author: Leonard Tang                  # change to your full name
 
-avatar: /assets/img/sample/avatar.jpg   # support internet resources
+avatar: /assets/img/sample/Leonard-Tang.JPG   # support internet resources
 
 github:
   username: github_username             # change to your github username
