@@ -14,7 +14,7 @@
   path: tabs
   url: about
 -
-  name: Categories
+  name: Explore
   icon: "fas fa-stream"
   path: tabs
   url: categories
