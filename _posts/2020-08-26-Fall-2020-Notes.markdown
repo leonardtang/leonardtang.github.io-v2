@@ -1,0 +1,19 @@
+---
+title: Fall 2020 Course Notes
+date: 2020-08-26 03:14:00 -0400
+categories: [Notes]
+tags: [academic]     # TAG names should always be lowercase
+---
+
+### A Collection of My Fall 2020 Course Notes:
+> An \* denotes a graduate level course, and a <sup>†</sup> denotes a class I am a Course Assistant for.
+* * *
+
+Math 122: Theory of Groups and Vector Spaces <br/>
+AC 209a: Data Science* <br/>
+MIT 6.840: Theory of Computation* <br/>
+MIT 6.006: Introduction to Algorithms <br/>
+Stat 110: Introduction to Probability <br/>
+Math 22a: Vector Calculus and Linear Algebra I<sup>†</sup> <br/>
+
+*I am also taking Chinese 130xa: Pre-Advanced Modern Chinese for High-Proficiency Learners, which I have abstained from including above.*
