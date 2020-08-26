@@ -9,6 +9,11 @@
   name: Home
   icon: "fas fa-home"
 -
+  name: "About"
+  icon: "fas fa-info"
+  path: tabs
+  url: about
+-
   name: Categories
   icon: "fas fa-stream"
   path: tabs
@@ -23,8 +28,3 @@
   path: tabs
   url: archives
   icon: "fas fa-archive"
--
-  name: "About"
-  icon: "fas fa-info"
-  path: tabs
-  url: about
