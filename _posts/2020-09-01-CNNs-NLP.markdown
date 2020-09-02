@@ -1,0 +1,14 @@
+---
+title: CNNs for NLP
+date: 2020-09-01 01:32:00 -0400
+categories: [Explanations]
+tags: [academic]     # TAG names should always be lowercase
+---
+
+Applying one three-letter AI acronym to another!
+
+***
+
+### At a Glance
+
+Here, I attempt to explain Yoon Kim's 2014 paper on sentence classification using Convolutional Neural Networks. If you want to skip the nitty-gritty details and jump straight to the code, feel free to check out my PyTorch implementation of the model [here](https://github.com/leonardtang/CNN-for-NLP).
