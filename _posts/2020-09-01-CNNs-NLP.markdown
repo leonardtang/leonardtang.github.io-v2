@@ -16,6 +16,13 @@ Here, I attempt to explain Yoon Kim's 2014 paper on sentence classification usin
 
 ### But What is a CNN?
 
-Convolutional Neural Networks are an extension of vanilla neural networks. The key idea of is the *kernel* object (or synonymously, a filter or feature detector). The kernel is what produces a *convolution* from a given input/representation.
+Convolutional Neural Networks are an extension of vanilla neural networks. The key idea behind this architecture is the *kernel* object (or synonymously, a filter or feature detector). The kernel is what produces a *convolution* (or feature map) from a given input/representation.
+
+In the computer vision setting (where CNNs are often the most powerful network architecture), a kernel is simply a 2D matrix; it is applied to the outputted feature map from the previous layer (at the first layer, this is simply the input image) via element-wise multiplication and subsequent summation. For example, following 3x3 kernel takes would result in an output pixel with the value $ 9a + 8b + 7c + 6d + 5e + 4f + 3g + 2h + i $.
+
+![Kernel Operation](/assets/img/sample/kernel-operation.jpg)
+
+Depending on the values that the kernel takes on, we can get strikingly different results.
+
 
 A CNN is comprised of *convolutional layers* and *linear layers* (what you'd see in a vanilla neural network). The role of the convolutional layers is to extract key *features* from the input data, while the linear layers take in those features as inputs and *classify* (i.e. predict) a certain output label.
