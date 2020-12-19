@@ -1,0 +1,22 @@
+---
+title: Thoughts on Theory of Computation
+date: 2020-12-18 11:12:00 -0400
+categories: [Notes]
+tags: [academic]     # TAG names should always be lowercase
+---
+
+I might just become a Complexity Theorist.
+
+***
+
+### **A Synopsis of 18.404/6.840**
+
+This class was...strange. Incredibly challenging and intellectually stimulating, though quite unlike any analytical class I've take before. Proving things in Theory of Computation relies on a certain pictorial instinct and creativity that was absent from most other math/CS classes I've taken before. The major constructions and theorems in the course are truly mind-blowing when you see them for the first time; and their intricacies are really quite beautiful.
+
+In my opinion, this was a deceptively hard course; it appears to cover a modest amount of content, and rarely does one feel *entirely* lost during lecture. Much of the content in the course (and the field, I suppose) can essentially be boiled down to finding a single clever reduction between problem instances. It is easy, then, to trick yourself into thinking you know everything. But the deeper into the subject the dive, the more you realize you didn't *really* know what was going on in the first place -- perhaps the Dunning-Kruger effect in full force.
+
+Regardless, the course was an absolutely terrific learning experience. Sipser is a legend in the field and is passionate about undergraduate teaching (not true for most professors!). I recommend if whole-heartedly.
+
+### **Notes**
+
+If you want to learn (at a high level) what Computability/Complexity Theory is all about, my friend Austin Li and I have scribed up some of the notes from the semester. Feel free to check them out [here](../../assets/MIT_6_840_Notes__Fall_2020_.pdf).
