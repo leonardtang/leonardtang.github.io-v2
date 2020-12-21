@@ -15,7 +15,7 @@ This class was...strange. Incredibly challenging and intellectually stimulating,
 
 In my opinion, this was a deceptively hard course; it appears to cover a modest amount of content, and rarely does one feel *entirely* lost during lecture. Much of the content in the course (and the field, I suppose) can essentially be boiled down to finding a single clever reduction between problem instances. It is easy, then, to trick yourself into thinking you know everything. But the deeper into the subject the dive, the more you realize you didn't *really* know what was going on in the first place -- perhaps the Dunning-Kruger effect in full force.
 
-Regardless, the course was an absolutely terrific learning experience. Sipser is a legend in the field and is passionate about undergraduate teaching (not true for most professors!). I recommend if whole-heartedly.
+Regardless, the course was an absolutely terrific learning experience. Sipser is a legend in the field and is passionate about undergraduate teaching (not true for most professors!). I recommend it whole-heartedly.
 
 ### **Notes**
 
