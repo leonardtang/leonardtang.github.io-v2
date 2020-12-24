@@ -5,24 +5,89 @@ categories: [Explanations]
 tags: [academic]     # TAG names should always be lowercase
 ---
 
-Applying one three-letter AI acronym to another!
+<style>
+figcaption {
+  background-color: white;
+  color: black;
+  font-style: italic;
+  padding: 2px;
+  text-align: center;
+}
+</style>
+
+Applying one three-letter AI acronym to another (with minimal math)!
 
 ***
 
-### At a Glance
+### **At a Glance**
 
 Here, I attempt to explain Yoon Kim's 2014 paper on sentence classification using Convolutional Neural Networks. If you want to skip the nitty-gritty details and jump straight to the code, feel free to check out my PyTorch implementation of the model [here](https://github.com/leonardtang/CNN-for-NLP).
 
 
-### But What is a CNN?
+### **But What is a CNN?**
 
-Convolutional Neural Networks are an extension of vanilla neural networks. The key idea behind this architecture is the *kernel* object (or synonymously, a filter or feature detector). The kernel is what produces a *convolution* (or feature map) from a given input/representation.
+At a high level, Convolutional Neural Networks are simply an extension of vanilla neural networks. The key idea behind this architecture is the *kernel* object (or synonymously, a filter or feature detector). The kernel is what produces a *convolution* (or feature map) from a given input/representation.
 
 In the computer vision setting (where CNNs are often the most powerful network architecture), a kernel is simply a 2D matrix; it is applied to the outputted feature map from the previous layer (at the first layer, this is simply the input image) via element-wise multiplication and subsequent summation. For example, the following 3x3 kernel applied to pixels belonging to the input feature map would result in an output pixel with value $9a + 8b + 7c + 6d + 5e + 4f + 3g + 2h + i$:
 
-![Kernel Operation](/assets/img/sample/kernel-operation.jpg)
+<figure>
+  <img src="/assets/img/sample/kernel-operation.jpg" alt="Kernel Operation" width="300"/>
+  <figcaption>Fig. 1 - Kernel Operation</figcaption>
+</figure>
 
-Depending on the values that the kernel takes on, we can get strikingly different results.
+Depending on the values that the kernel takes on, we can get strikingly different results. Consider the following image below (taken in Nanjing, China circa December 2019):
 
+<figure>
+  <img src="/assets/img/Nanjing_Gray.jpeg" alt="Fuzimiao" width="400"/>
+  <figcaption>Fig. 2 - A Shrine in Nanjing, China</figcaption>
+</figure>
 
-A CNN is comprised of *convolutional layers* and *linear layers* (what you'd see in a vanilla neural network). The role of the convolutional layers is to extract key *features* from the input data, while the linear layers take in those features as inputs and *classify* (i.e. predict) a certain output label.
+Now, applying different kernels yields a wide variety of results:
+
+<figure>
+  <img src="/assets/img/Nanjing_Edge.jpeg" alt="Edge Detection" width="300"/>
+  <figcaption>Fig. 3 - Post-Sobel Operator Application (Edge Detection) </figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/img/Nanjing_Sharp.jpeg" alt="Edge Detection" width="300"/>
+  <figcaption>Fig. 4 - Sharpened Image </figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/img/Nanjing_Blur.jpeg" alt="Edge Detection" width="300"/>
+  <figcaption>Fig. 5 - Blurred Image </figcaption>
+</figure>
+
+As one can see, these kernels are quite powerful on their own. If you want to take a deeper dive into how these images were produced, the notebook for the above images can be found [here](https://github.com/leonardtang/toolbox/blob/master/image-filters.ipynb).
+
+Now, a CNN takes the notion of a kernel to the next level. Broadly, a CNN is comprised of *convolutional layers* and *linear layers* (what you'd see in a vanilla neural network). The role of the convolutional layers is to extract key *features* from the input data, while the linear layers take in those features as inputs and *classify* (i.e. predict) a certain output label. The convolutional layers rely primarily on convolutional kernels -- essentially what we've seen above, but with a few more bells and whistles, such as max-pooling layers and multiple channels per filter.
+
+### **Do CNNs Work for NLP?**
+
+It is well-known that CNNs excel at visual perception tasks because, by virtue of having multiple chained convolutional layers, they are able to pre-extract features and reduce the dimensionality of input images *before* the actual classification/regression takes place (via the standard linear layers). You can think of a CNN as a more efficient vanilla neural network that automatically detects the most salient features and feeds *those features as input* to a regular network (versus feeding an image directly into a vanilla network).
+
+It is less obvious if CNNs are suitable in text-based settings, especially due to the temporal nature of such problems (e.g. a phrase from the first half of a sentence could have major ramifications for a phrase's contextual meaning in the latter half of a sentence). Generally, RNN (Recurrent Neural Network) models are best suited for capturing precisely this sort of temporal dependency within textual inputs, and it is usually difficult for CNNs to exhibit this same type of advantage.
+
+Surprisingly, we'll see that Yoon Kim was able to achieve impressive sentence-level classification accuracies using CNNs, as opposed to RNNs.
+
+### **The Model**
+
+What Kim proposed was actually a fairly straightforward, but really powerful idea. At its core, he sought to leverage pre-trained word vectors (e.g. from an unsupervised neural language model like Word2Vec or GloVe), and train a simple CNN with just one (!) convolution layer on top of it for the sentiment classification task. Thus, the input (sentence) first gets transformed to its vector representation, which gets passed through the CNN for a classification result:
+
+<figure>
+  <img src="/assets/img/Kim_Model.png" alt="Model Architecture" width="600"/>
+  <figcaption>Fig. 6 - Model Architecture (from Kim's Paper) </figcaption>
+</figure>
+
+From the outline above, we can see that the model is actually fairly simple and digestible. Given a $ n \times k $ sentence vector representation as input, where $ n $ is the number of words in the sentence and $ k $ is the dimension of the vector space of word embeddings, the model convolves across the input to produce a $ n - h + 1 \times 1 $ feature map $ \vec{c} \in \mathbb{R}^{n-h+1} $, which then gets squashed into a $ 1 \times 1 $ output as a result of max-over-time pooling (which is just max-pooling, with emphasis on the fact that there's aggregation over a period of "time" rather than, say, a local image region). This happens for *each* feature (the above describes the process for extracting *one* feature).
+
+Finally, the model passes the extracted features through a fully connected layer with dropout (rate $ p = 0.5$) and softmax activation. Throughout the model, the author also uses $ l_2 $ weight regularization/clipping with by rescaling weight vectors $ \vec{w}$ to $ \|\| \vec{w}\|\| = s = 3 $ if $ \|\| \vec{w}\|\|_{2} > s $.
+
+Now, the main complexity with this approach lies in how it accounts for inter-temporal word/phrase dependencies. Given that CNNs aren't really a memory-based heuristic, the brilliant alternative here is to use *kernels of varying length to extract features across different time-scales.* That is, instead of having only one kernel (say, of size $ h \times k$ where $h $ is a fixed sub-phrase length that the kernel is applied on), the model has *multiple* kernels of with varying length $h$ to extract *multiple* features maps. This way, the convolutional layer is able to capture, in effect, global as well as local contextual dependencies within the text. *This* is the key insight that Kim brought to the table with his paper.
+
+### **The Takeaway**
+
+CNNs, though traditionally unsuitable for NLP tasks, can also be successfully applied in sentence classification settings as shown by Kim in his 2014 paper. Not only is this approach highly effective at this specific task, it is also extremely lightweight, only requiring an additional convolutional layer and standard linear layer on top of pre-computed word embeddings.
+
+This is just the very tip of the iceberg -- if you're interested in diving deeper, I of course recommend looking at the [code](https://github.com/leonardtang/CNN-for-NLP) and/or consulting the [original paper](https://arxiv.org/pdf/1408.5882.pdf).
