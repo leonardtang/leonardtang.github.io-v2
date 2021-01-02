@@ -7,8 +7,6 @@ tags: [academic]     # TAG names should always be lowercase
 
 <style>
 figcaption {
-  background-color: white;
-  color: black;
   font-style: italic;
   padding: 2px;
   text-align: center;
