@@ -26,6 +26,8 @@ layout: compress
   {% include head.html %}
 
   <body data-spy="scroll" data-target="#toc">
+    <script src=”https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id=”MathJax-script” async src=”https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <div id="sidebar" class="d-flex flex-column">
       {% include sidebar.html %}
@@ -61,6 +63,3 @@ layout: compress
   </body>
 
 </html>
-
-<script src=”https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id=”MathJax-script” async src=”https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
