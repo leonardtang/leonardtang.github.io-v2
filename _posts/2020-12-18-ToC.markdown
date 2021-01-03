@@ -4,7 +4,6 @@ date: 2020-12-18 11:12:00 -0400
 categories: [Notes]
 tags: [academic]     # TAG names should always be lowercase
 ---
-
 <style>
 figcaption {
   font-style: italic;
