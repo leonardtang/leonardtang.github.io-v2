@@ -1,5 +1,5 @@
 ---
-title: Theory of Computation is...Fun
+title: Theory of Computation is Fun
 date: 2020-12-18 11:12:00 -0400
 categories: [Notes]
 tags: [academic]     # TAG names should always be lowercase
