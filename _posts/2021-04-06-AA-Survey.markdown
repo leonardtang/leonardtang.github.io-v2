@@ -88,7 +88,7 @@ Below is a table summarizing the key differences between white and black box att
 
 A typical test-time whitebox attack can be thought of as two subprocesses:
 
-1. First, the adversary will estimate the \textbf{directional sensitivity} of the data. That is, the adversary aims to get a grasp of which direction(s) in the data manifold could potentially induce class change. Generally, this amounts to obtaining the gradient of the loss function with respect to the input image. 
+1. First, the adversary will estimate the **directional sensitivity** of the data. That is, the adversary aims to get a grasp of which direction(s) in the data manifold could potentially induce class change. Generally, this amounts to obtaining the gradient of the loss function with respect to the input image. 
 2. Second, given this sensitivity information, the adversary needs to actually perturb the input image. There are a variety of ways to approach this, which we will cover later in this write-up.
 
 The adversary continues to iteratively perform the above process until the input image is sufficiently perturbed for misclassification. Ideally, the adversary should minimize iterations and perturbations to create a minimally-observable change to the input image that avoids human detection.
