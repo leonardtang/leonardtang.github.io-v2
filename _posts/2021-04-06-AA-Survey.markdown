@@ -1,0 +1,267 @@
+---
+title: A Survey on Adversarial Attacks
+date: 2021-04-06 10:20:00 -0400
+categories: [Explanations]
+tags: [academic]     
+---
+
+<script src="//yihui.org/js/math-code.js"></script>
+<!-- Just one possible MathJax CDN below. You may use others. -->
+<script async
+  src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+Breaking AI.
+
+***
+
+# **Attacking Machine Learning**
+
+Adversarial attacks have gotten no shortage of hype in the machine learning community throughout the past few years. Their intrigue stems from the fact they are much like optical illusions for machine learning models. More precisely, adversarial attacks are carefully (i.e. mathematically) crafted inputs in a model's domain that are benign to humans but are adversarial to machines; that is, models misclassify such inputs in spectacular fashion. For concreteness, take a look at one of the first examples of adversarial attacks for computer vision:
+
+<center>
+	<figure font-style="italic">	
+	  <img src="/assets/img/fgsm-image.png" alt="FGSM Attack" width="800" />
+	<figcaption> Fig. 1 - An adversarial attack fools an image classifier into thinking a panda is a gibbon (Goodfellow et al., 2014)  </figcaption>
+	</figure>
+</center>
+
+<!-- <p align="center">
+  <img src="/assets/img/fgsm-image.png" alt="FGSM Attack" width="800" />
+</p> -->
+
+While adversarial attacks are fun to play with, their existence is not a mere curiosity. The fact that adversarial attacks can fool supposedly sophisticated deep learning models highlights fundamental flaws in the state-of-the-art in machine learning. In some sense, the existence of adversarial attacks suggests that such models are nothing more than glorified, brittle pattern matchers. Specifically, deep learning classifiers, as they stand today, more or less view some set of input pixel values and magically learn to pattern match them to classes; however, they lack the ability to store generalized, robust knowledge -- that is, not just the ability to derive some complex mapping between input and output, but to understand *what* about the input induces distinctive, invariant properties that are characteristic of a certain class. Without this fundamental, human-like ability to intuit generalized features, machine learning will continue to be thwarted by adversarial attacks.
+
+In this post, we'll take a tour of the vast field of adversarial attacks and robustness, and see how and why deep learning can be broken.
+
+# **The Basics: Terminology**
+
+**Adversarial Attack:** model input that is adversarial in the sense that it seeks to cause unintended, nonsensical behavior in the model. In computer vision, specifically image classification, this is often a "minimally perturbed" image -- that is, an image that appears to be unedited to the human eye, but causes gross misclassification by the machine. 
+
+**Attack Surface:** the domain in which the adversary will modify elements. Generally, the adversary will manipulate either collection or processing of data.
+
+## **Types of Attacks**
+
+**Poisoning Attack:** an adversary contaminates the training data by inserting well-chosen samples into the training process.
+
+**Exploratory Attack:** an adversary queries a black box model to explore its behavior.
+
+**Evasion Attack:** an adversary creates malicious samples during testing phase. It does *not* touch the training data. This it what we generally think of when it comes to adversarial attacks.
+
+**Training Phase Attacks:** an adversary attempts to manipulate training labels in a clever way to cause misclassification at test time. Alternatively, malicious data might be injected into the dataset during training. Neither of these approaches are that common in the literature nor in practice.
+
+**Testing Phase Attacks (Generations):**
+
+In general, given a model $ f $ and input $ X $, the goal is to craft $ X' = X + \delta X$ where $ \delta X$ is some perturbation such that $f(X') = Y \neq f(X)$. We focus first on the **whitebox attack** scenario, where the adversary has full knowledge of the model (i.e. parameters, architecture, and losses).
+
+## **Adversarial Capabilities During Training**
+
+**Data Injection:** an adversary can insert adversarial samples during training, but has no access to the training data or model.
+
+**Data Modification:** an adversary can modify the training data before it gets sent to algorithm. Adversary has access to full training dataset but not model. 
+
+**Logic Corruption:** adversary directly attacks model logic instead of the training data.
+
+## **White vs. Black-Box Attacks**
+
+**White Box Attacks:** in this setting, the adversary has complete knowledge of the target model's architecture, its training data, and its parameters (i.e. its current weights, and hence the losses throughout the model).
+
+**Black Box Attacks:** here, the adversary has *no* knowledge of the model. It does, however, have the ability to sample inputs from the training distribution. Thus, it can query the model with inputs and observe outputs.
+
+
+
+- **Non-Adaptive Black Box Attacks:** here, the adversary has access to the training data distribution and transfers white box attacks on a surrogate model approximating the target model. Specifically, one can train a local model with architecture $ f' $ on the original data distribution $ \mu $. $ f' $ behaves similarly to the original model $f$, and thus it is reasonable to craft adversarial inputs for $ f' $ using white-box strategies, then transfer them as attacks on $f$.
+- **Adaptive Black Box Attacks:** here, the adversary has *no* information about the training dataset *or* the model. Thus, it must treat the target model as an oracle, adaptively querying the model with non-training-distribution data $ X $ to obtain labels $ Y $. The adversary trains a surrogate model with architecture $ f' $ over tuples $ (X,Y)$. Again, the adversary crafts white-box attacks on $f'$, and transfers them over to the target model $ f $. It is an "adaptive" approach in the sense that the queries $ X $ are chosen "cleverly" over time to uncover the behavior of the underlying model.
+- **Strict Black Box Attack:** here, the adversary can also collect tuples $(X,Y)$ by querying the target model. However, unlike adaptive attacks, these models cannot change inputs to observe outputs.
+
+Below is a table summarizing the key differences between white and black box attacks:
+
+<center>
+	<figure font-style="italic">	
+	  <img src="/assets/img/black-vs-white-attack.png" alt="White vs. Black Box Attacks" width="800" />
+	<figcaption> Fig. 2 - Table Summarizing Differences Between White and Black Box Attacks  </figcaption>
+	</figure>
+</center>
+
+
+# **Framework of a Test-Time Adversary**
+
+A typical test-time whitebox attack can be thought of as two subprocesses:
+
+1. First, the adversary will estimate the \textbf{directional sensitivity} of the data. That is, the adversary aims to get a grasp of which direction(s) in the data manifold could potentially induce class change. Generally, this amounts to obtaining the gradient of the loss function with respect to the input image. 
+2. Second, given this sensitivity information, the adversary needs to actually perturb the input image. There are a variety of ways to approach this, which we will cover later in this write-up.
+
+The adversary continues to iteratively perform the above process until the input image is sufficiently perturbed for misclassification. Ideally, the adversary should minimize iterations and perturbations to create a minimally-observable change to the input image that avoids human detection.
+
+Formally, adversarial samples can be considered as a solution to the following optimization problem. That is, for some norm $ \| \cdot \|$, we want to solve the following:
+
+$$ X' = X + \underset{\delta X}{\mathop{\mathrm{argmin}}} \{ \| \delta X\| : f(X + \delta X) \neq f(X) \}$$
+
+Solving this directly in practice is difficult since this is a non-convex formulation for neural networks. So, we approximate using the approaches outlined below. 
+
+
+# **Gradient Ascent-Based Attack Variations**
+
+## **General Fast Gradient Sign Method (FGSM)**
+
+FGSM is a very fast, one-iteration, gradient-based attack method. Recall
+that the gradient of the loss function w.r.t. the input image points us
+in the direction of greatest ascent on the data manifold. Here, instead
+of stepping in the direction of the gradient, we step in the direction
+of the *sign* of the gradient:
+
+$$ \eta = \epsilon \cdot \text{sign}(\nabla_x J_\theta (x,l)) $$
+
+$$ x' = x + \eta $$
+
+The $ \epsilon $ ensures the resulting $x'$ is still within an
+$\epsilon$-ball (as defined for $ \| \cdot \|_\infty $) around $x$.
+
+## **Fast Gradient Method (FGM)**
+
+FGM is essentially the same as FGSM, except the image is perturbed in
+the direction of the gradient, i.e. not the sign of the gradient:
+
+$$x' = x + \epsilon \cdot \frac{\nabla_x J_\theta(x, l)}{\|\nabla_x J_\theta(x, l)\|_p}$$
+
+The gradient is normalized to ensure that the perturbation is still
+within the $\epsilon$-bound.
+
+## **Targeted Fast Gradient Sign Method**
+
+The approach above forces misclassification *away* from the starting
+class, but does not specify *which* class the image should move towards.
+Here, define the target class to be $l' \neq l$, the original class.
+Then the approach is as follows:
+
+$$x' = x - \epsilon \cdot (\nabla_x J_\theta (x, l'))$$
+
+Here, the image is stepping *towards* a specific incorrect class, rather
+than merely away from the correct class (in an untargeted fashion).
+
+## **Iterative Fast Gradient Sign Method (I-FGSM)**
+
+The idea here is to simply iteratively perform the FGSM:
+
+$$x_{t+1} = x_t + \epsilon \cdot \alpha \cdot \text{sign}(\nabla_x J_\theta (x_t,l)) \text{, where} x_0 = x$$
+
+Specifically, clip $x_{t+1}$ into an $\epsilon$-ball around $x_0$ after
+each iteration to minimize human detection. Alternatively, it also
+possible to set $\alpha = \epsilon /T$, where $T$ is the number of
+iterations.
+
+Generally, iterative methods are more successful at confusing
+classifiers due to their more nuanced approach towards the mistargeted
+class.
+
+However, on the flip side, more iterations necessarily require longer
+runtimes to generate attacks due. Surprisingly, they also do not
+transfer as well across models as their single-step counterparts.
+
+## **Momentum Iterative Fast Gradient Sign Method (MI-FGSM):**
+
+The approach here is largely the same as above, barring the introduction
+of a momentum vector! Specifically, accumulate a velocity vector $g$
+over time with some decay factor $\mu$. To account for varying gradient
+scales across iterations, normalize the gradients during each iteration:
+
+$$ g_{t+1} = \mu \cdot g_t + \frac{\nabla_x J_\theta(x_t, l)}{\|\nabla_x J_\theta(x_t, l)\|_p}$$
+
+Then step in the direction of the sign of the velocity vector:
+
+$$x_{t+1} = \alpha \cdot \text{sign}(g_{t+1})$$
+
+## **Projected Gradient Descent (PGD):**
+
+Technically, projected gradient descent should be called projected
+gradient *ascent*. It is a natural extension of FGSM and is
+fundamentally the same idea as I-FGSM.
+
+The approach here is to step in the direction of the sign of the
+gradient for multiple iterations while projecting the vector at each
+iteration into an $\epsilon$-ball around the original data point:
+
+
+$$ x_{t + 1} = \pi(x_t + \alpha \cdot \text{sign}(\nabla_x J_\theta (x_t, l))) $$
+
+
+Here, $\pi$ is some kind of projection. In the $l_\infty$-norm case, a
+simple clipping function suffices; in PyTorch, this would be something
+like `torch.clamp`.
+
+To better explore the loss landscape of first-order attacks, the authors
+in [Madry et. al (2017)](https://arxiv.org/abs/1706.06083) start PGD
+from many points in the $l_\infty$-balls around the input data points.
+Interestingly enough, though the local maxima are spread all throughout
+these $\epsilon$-balls, their *values* are tightly concentrated. This,
+alongside strong experimental evidence -- PGD-attack-trained models were
+consistently robust against all other gradient-ascent-based methods --
+that PGD is a universal first-order adversary, i.e. the strongest
+possible attack only leveraging gradient information. That is, a model
+that is robust to PGD attacks is robust to all first-order attacks.
+
+
+# **Other Attacks**
+
+## **Limited Memory Broyden--Fletcher--Goldfarb--Shanno Attack (L-BFGS):**
+
+L-BFGS itself is a well-known quasi-newton optimization method, i.e. a
+second order optimization method with Hessians approximated based on the
+$k$-most recent gradients.
+
+L-BFGS was one of the very first adversarial attack approaches. It
+exhibits decent attack capabilities but unfortunately is very expensive.
+
+## **DeepFool:**
+
+DeepFool is a non-gradient-ascent based iterative algorithm for finding
+adversarial images. The core idea is to start with an input image,
+search for the closest decision boundary (the specific boundary is
+irrelevant), orthogonally project the input image to a linear
+approximation of the decision boundary, and repeat until the perturbed
+image has crossed a boundary.
+
+The full algorithm for the multi-class instance is shown below:
+
+<center>
+	<figure font-style="italic">	
+	  <img src="/assets/img/deepfool-algo.png" alt="White vs. Black Box Attacks" width="800" />
+	<figcaption> Fig. 3 - The DeepFool Algorithm  </figcaption>
+	</figure>
+</center>
+
+
+## **JSMA: Jacobian-Based Saliency Map Attack**
+
+The idea behind JSMA is to compute a saliency map output $S^{+}(x_i,l)$
+for a model/image/class combination (here $x_i$ is one pixel of the
+input $x$). Recall that the saliency map roughly calculates the
+correlation (positive, for a $S^+$ map) between an input pixel and the
+predicted class.
+
+Now theoretically, by increasing a few high-saliency pixels $x_i$
+according to $S^{+}(x_i,  l=target)$, the perturbed image will be more
+likely to be classified as the adversarial class *target*.
+
+In practice, this approach actually searches over salient pixel *pairs*
+due to the strict nature of the salience map criterion. However, the
+core idea is the same.
+
+## **Backward Pass Differentiable Approximation Attack:**
+
+Conceptually, this attack is similar in principle to the idea of a
+Straight Through Estimator. In fact, using Straight Through Estimation
+is a special case of this Differentiable Approximation Attack.
+
+This attack rose to prominence as a response to model defenses that
+obfuscated gradients via the introduction of a non-differentiable layer
+$f^i(\cdot)$. Clearly, standard first-order approaches wouldn't succeed
+given the non-differentiability.
+
+However, it is possible to first find a differentiable approximation
+$g(x)$ such that $g(x) \approx f^i(\cdot)$. Then, using $g$ we can
+approximate $\nabla_x f(x)$ by first forward passing through
+$f(\cdot) = f^{1\dots j}(\cdot)$ but replacing $f^i(\cdot)$ with
+$g(\cdot)$ on the backward pass. This effectively bypasses the
+non-differentiability, nullifying the defense and allowing the power of
+first-order methods to flourish.
