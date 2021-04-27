@@ -1,0 +1,56 @@
+---
+title: Stonks, Stonks, Stonks
+date: 2021-04-27 10:20:00 -0400
+categories: [Projects]
+tags: [projects]     
+---
+
+<script src="//yihui.org/js/math-code.js"></script>
+<!-- Just one possible MathJax CDN below. You may use others. -->
+<script async
+  src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+Memeing r/wallstreetbets.
+
+***
+
+# **To the Moon**
+
+Enjoy: [http://www.wsbstonks.us/](http://www.wsbstonks.us/).
+
+
+# **Getting the Data**
+
+Much like the Twitter API, the Reddit API is garbage. It limits you to the 1000 most recent listings by time -- truly unfortunate.
+
+Thankfully, the Pushshift.io API is an effective surrogate. You have to make paginated requests and wait an annoying amount of time between requests to not overload the API, but at least it works. I also had to throw in some `try-excepts` with continuous re-requesting to prevent my script from dying in the event of an ephemeral server error. I ran this all from a `tmux` shell in case my computer decided to go haywire in the middle of the run. There were also periodic checkpoint saves for the data -- smart choice, as the total script took ~10 hours to run, and halted multiple times during execution.
+
+Surprisingly, WSB gets a lot of submissions per day. In the past year alone WSB received something like 1,200,000+ submissions. Evidently, retail investors go hard.
+
+To actually count up stock mentions, I performed some not-so-fancy exact-matching for all NYSE stock tickers and names, with various common (mis)-spellings within the latter. 
+
+Using the `yahoo-finance-2` API, I grabbed historical pricing data for the top ~20 stocks by WSB mention. (Note the official Yahoo Finance API is deprecated, shoutout to the hero maintaing this third-party API).
+
+But why stop at stocks? I decided to rinse and repeat the above process for cRyPtoCuRrEncIes.
+
+Finally, I also summed up the total WSB stock mentions over time to get a proxy measure for total retail investor activity. I ended up comparing this to the VIX over time to get a sense of whether or not retail investors move the needle on market volatility (spoiler, they don't).
+
+
+# **Aesthetics**
+
+The frontend was built with Dash, HTML, and CSS, which got me very far. I am by no means a frontend guru, but the site still turned out reasonably sexy.
+
+
+# **MaCh33n L3aRn**
+
+Ah, but what's a quant project without some ~fancy~ MaCh33n l3Arn. 
+
+To do some sentiment analysis on WSB submissions, I decided to go overboard and use some SOFA Transformer models. Really, a SVM or even VADER probably could have sufficed. But I was in the mood to be extra, so I ended up playing with a off-the-shelf DistilBERT model and a finetuned XLNet model.
+
+I grabbed the DistilBERT model from Hugging Face -- it was pretrained on the SST-2 sentiment analysis classification task, so it was a perfect fit for my needs. Unfortunately, the max window length for the model is 512 tokens. The max token length in the WSB data was something like 4000+. As such, I needed to slice up each submissions into 512-windows, classify each window, and take a max-vote across windows for the ultimate submission classification. This is an OK approach, but not very scientific at all.
+
+In comes XLNet, or Transformer-XL. XLNet is basically Transformers on steroids. Actually, it's also RNNs on steroids. It's basically an RNN with recurrent connections between *sequences of tokens*, rather than individual tokens. Each sequence itself is modeled with local attention. So it's essentially an RNN wrapped on top of a Transformer. It's better at dealing with long-length data than either vanilla Transformers or RNNs themselves -- this is reflected in the fact that there is *no* explicit max token length, unlike our original DistilBERT model.
+
+I went ahead and grabbed a pretrained XLNet model from Hugging Face, and fine-tuned it on the IMDB Movie Reviews dataset. It achieved ~96% accuracy on the test set. To be more rigorous, I really should have labelled some WSB comments (via MTurk or the like) to ensure that XLNet was really doing what it's supposed to. In any case, it should be pretty robust and effective at classifying WSB submissions.
+

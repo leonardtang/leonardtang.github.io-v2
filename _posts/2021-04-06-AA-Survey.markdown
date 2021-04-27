@@ -21,7 +21,7 @@ Adversarial attacks have gotten no shortage of hype in the machine learning comm
 
 <center>
 	<figure font-style="italic">	
-	  <img src="/assets/img/fgsm-image.png" alt="FGSM Attack" width="800" />
+	  <img src="/assets/img/fgsm-image.png" alt="FGSM Attack" width="700" />
 	<figcaption> Fig. 1 - An adversarial attack fools an image classifier into thinking a panda is a gibbon (Goodfellow et al., 2014)  </figcaption>
 	</figure>
 </center>
@@ -78,7 +78,7 @@ Below is a table summarizing the key differences between white and black box att
 
 <center>
 	<figure font-style="italic">	
-	  <img src="/assets/img/black-vs-white-attack.png" alt="White vs. Black Box Attacks" width="800" />
+	  <img src="/assets/img/black-vs-white-attack.png" alt="White vs. Black Box Attacks" width="700" />
 	<figcaption> Fig. 2 - Table Summarizing Differences Between White and Black Box Attacks  </figcaption>
 	</figure>
 </center>
@@ -225,7 +225,7 @@ The full algorithm for the multi-class instance is shown below:
 
 <center>
 	<figure font-style="italic">	
-	  <img src="/assets/img/deepfool-algo.png" alt="White vs. Black Box Attacks" width="800" />
+	  <img src="/assets/img/deepfool-algo.png" alt="White vs. Black Box Attacks" width="700" />
 	<figcaption> Fig. 3 - The DeepFool Algorithm  </figcaption>
 	</figure>
 </center>
