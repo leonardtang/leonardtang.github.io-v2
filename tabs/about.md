@@ -12,7 +12,11 @@ title: About
 
 Hello, and welcome to my rendition of yet another vaguely academic personal site!
 
-More seriously, my name is Leonard Tang, and I'm a sophomore at Harvard pursuing a joint concentration in Mathematics and Computer Science. Outside of class, I attempt to do research in computer vision/deep learning. During Summer 2020, I had the privilege of working with Gabriel Kreiman and Mengmi Zhang on context-aware computer vision and adversarial attacks. On campus (or some virtual surrogate of one in this covid era), I find myself involved in primarily [four-letter student organizations](https://www.harvardconsulting.org/).  
+More seriously, my name is Leonard Tang, and I'm a sophomore(-ish) at Harvard pursuing a joint concentration in Mathematics and Computer Science. I'm currently taking two gap semesters for the Spring and Fall of 2021.
+
+Outside of class, I *attempt* to do research in computer vision/deep learning. More recently, I've been fortunate enough to make a foray into NLP through an incredible internship experience at [Gamalon](https://gamalon.com/).
+
+I'm also passionate about guitar (mostly acoustic!), violin, the blues, drone cinematography, and [Datamatch](https://datamatch.me/). 
 
 ### **Why this Site?**
 
@@ -20,7 +24,7 @@ This website is meant to serve as a collection of notes, intellectual tidbits, p
 
 ### **My Experience**
 
-For more on my background, please see my [resume](../../assets/Leonard-Tang-Resume.pdf) and [LinkedIn](https://www.linkedin.com/in/leonard-tang/).
+For more on my background, please see my [resume](../../assets/Leonard-Tang-Tech-Resume.pdf) and [LinkedIn](https://www.linkedin.com/in/leonard-tang/).
 
 ### **Questions?**
 
