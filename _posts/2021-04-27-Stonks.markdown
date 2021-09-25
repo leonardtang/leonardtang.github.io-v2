@@ -54,3 +54,6 @@ In comes XLNet, or Transformer-XL. XLNet is basically Transformers on steroids. 
 
 I went ahead and grabbed a pretrained XLNet model from Hugging Face, and fine-tuned it on the IMDB Movie Reviews dataset. It achieved ~96% accuracy on the test set. To be more rigorous, I really should have labelled some WSB comments (via MTurk or the like) to ensure that XLNet was really doing what it's supposed to. In any case, it should be pretty robust and effective at classifying WSB submissions.
 
+# **Expert.ai Hackathon**
+
+I also submitted this project on a whim over the summer and ended up being a category winner of the Expert.ai NLP hacakthon. See the press release [here](https://www.yahoo.com/now/expert-ai-announces-winners-sentiment-130000915.html).
