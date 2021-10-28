@@ -31,7 +31,7 @@ Indeed, once their goals are set, elite students will more likely than not achie
 
 The only setting in which vanilla gradient descent provides a globally optimal solution is, of course, when the loss function is convex. This is certainly not a given in most optimization problems, and it is doubly so that the complexity of life cannot be neatly distilled into a convex function.
 
-From a purely objective standpoint, it's really quite silly to think that a job at FAANG (or equivalently some shiny quant firm/bank/consultancy) with dubious inherent meaning would be a reasonable *singular* proxy for career/life satisfication; and yet so many of us blindly abide by these approximations and optimize within this wishfully smooth error manifold.
+From a purely objective standpoint, it's really quite silly to think that a job at FAANG (or equivalently some shiny quant firm/bank/consultancy) with dubious inherent meaning would be a reasonable *singular* proxy for career/life satisfication; and yet so many of us blindly abide by these approximations and optimize within this wishfully smooth value manifold.
 
 In reality, our value functions are anything but simple and convex. When we assume that this is the case and approach our future with the same approach we've used our entire lives -- i.e. vanilla gradient descent -- we are destined for suboptimality.
 
