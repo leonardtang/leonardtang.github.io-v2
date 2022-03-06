@@ -14,7 +14,7 @@ Hello, and welcome to my vaguely academic personal site (that's no-doubt quirky 
 
 More seriously, my name is Leonard Tang, and I'm a sophomore(-ish) at Harvard pursuing a joint concentration in Mathematics and Computer Science. I'm currently taking two gap semesters for the Spring and Fall of 2021.
 
-Outside of class, I *attempt* to do research in deep learning. I've been fortunate enough to make a foray into NLP through an incredible research internship experience at [Gamalon](https://gamalon.com/), where I worked directly with CEO Dr. Ben Vigoda on evolutionary programs for low-data structured graph learning. More recently, I've started to further develop my research taste with Dan Hendrycks (the GeLU inventor)/Jacob Steinhardt/Dawn Song at Berkeley.
+Outside of class, I *attempt* to do [research](https://scholar.google.com/citations?hl=en&user=18ZQFjEAAAAJ) in deep learning. I've been fortunate enough to make a foray into NLP through an incredible research internship experience at [Gamalon](https://gamalon.com/), where I worked directly with CEO Dr. Ben Vigoda on evolutionary programs for low-data structured graph learning. More recently, I've started to further develop my research taste with Dan Hendrycks (the GeLU inventor)/Jacob Steinhardt/Dawn Song at Berkeley.
 
 In the past, I've also worked at Amazon as a Software Engineering Intern and the Center for Brains, Minds, and Machines at MIT as a computational neuroscience research assistant. I'm also currently interning at NVIDIA on the [MagLev](https://blogs.nvidia.com/blog/2018/09/13/how-maglev-speeds-autonomous-vehicles-to-superhuman-levels-of-safety/) team, working on AI Infrastructure for Autonomous Vehicles.
 
